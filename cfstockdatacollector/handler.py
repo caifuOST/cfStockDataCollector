@@ -41,27 +41,19 @@ def handle(req):
     try:
         json.loads(req)
         print(socket.gethostname())
-
-      #  responseMessage = '{
-      #      "status": "error",
-      #      "status_message": errorMessage,
-      #      "response": (logicMainHandler(req))
-      #  }'
-
         return logicMainHandler(req)
-        #return responseMessage
 
-
-
+    # catch value error exceptions
     except ValueError as err:
         return(errorResponse(format(err)))
+
+    # Catch all exceptions
     except:
         return (errorResponse("Unexpected error"))
 
 
 def logicMainHandler(req):
     '''
-
     :param req:
     :return: res
     '''
