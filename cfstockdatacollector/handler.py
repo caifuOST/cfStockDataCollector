@@ -3,10 +3,11 @@ import json
 #import socket
 
 
-# TODO these are some debugging lines that can be used when developing. If moving to a stable version we can remove this
+# TODO lines used to print to screen... prime used during dev. work and should be removed prior to release.
 #req = '{"tickersymbol": "oRcL"}'
-#req = '{"tickersymbol": "oRcL", "tickerperiod" : "1m"}'
-#req = '{"tickersymbol": "oRcL", "tickerperiod" : "1d", "tickerinterval" : "15m"}'
+#req = '{"ticddddkersymbol": "oRcL"}'
+#req = '{"tickersymbol": "ORCL", "tickerperiod" : "1d"}'
+req = '{"tickersymbol": "oRcL", "tickerperiod" : "1d", "tickerinterval" : "15m"}'
 
 
 def errorResponse(errorMessage):
@@ -40,8 +41,17 @@ def handle(req):
 
     try:
         json.loads(req)
-        print(socket.gethostname())
-        return logicMainHandler(req)
+        #print(socket.gethostname())
+
+        responseMessage = logicMainHandler(req)
+        #responseMessage = json.dumps(responseMessage)
+
+
+
+
+
+        #return logicMainHandler(req)
+        return responseMessage
 
     # catch value error exceptions
     except ValueError as err:
@@ -103,6 +113,21 @@ def logicMainHandler(req):
         return (errorResponse("unexpected error while parsing request JSON in logicModule"))
 
     # call the logic and return the outcome.
+
+    responseSuccessMessage = {
+        "status": "completed",
+        "status_message": "success",
+        "response": "xx"
+    }
+
+    print(type(responseSuccessMessage))
+    print (responseSuccessMessage)
+    print(type(stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval)))
+
+    print (json.dumps(responseSuccessMessage))
+    print (type(json.dumps(responseSuccessMessage)))
+
+
     return stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval)
 
 
@@ -115,3 +140,7 @@ def stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval):
     tickerData = tickerData.to_json(orient='index')
 
     return tickerData
+
+
+# TODO line used to print to screen... prime used during dev. work and should be removed prior to release.
+print(handle(req))
