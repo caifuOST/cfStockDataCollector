@@ -62,6 +62,10 @@ def handle(req):
 
 def logicMainHandler(req):
     '''
+    logicMainHandler will do a number of check and balances before calling the logic which will call the data from the
+    external data provider (Yahoo) and ensure that we build a fully qualified return message to be provided to the
+    calling application.
+
     :param req:
     :return: res
     '''
@@ -125,12 +129,15 @@ def logicMainHandler(req):
 
 def stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval):
     '''
+    Calling the external data provider (Yahoo) based upon the provided ticker symbol, the report period and the interval
+    so we can construct the exact set of data which the calling application requires.
 
     :param tickerSymbol:
     :param tickerPeriod:
     :param tickerInterval:
     :return:
     '''
+
     tickerSymbol = (tickerSymbol).upper()
     ticker = yf.Ticker(tickerSymbol)
     tickerData = ticker.history(period=tickerPeriod, interval=tickerInterval)
