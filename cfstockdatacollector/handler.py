@@ -6,7 +6,7 @@ import json
 # TODO lines used to print to screen... prime used during dev. work and should be removed prior to release.
 #req = '{"tickersymbol": "oRcL"}'
 #req = '{"ticddddkersymbol": "oRcL"}'
-req = '{"tickersymbol": "ORCL", "tickerperiod" : "1d"}'
+#req = '{"tickersymbol": "ORCL", "tickerperiod" : "1d"}'
 #req = '{"tickersymbol": "oRcL", "tickerperiod" : "1d", "tickerinterval" : "15m"}'
 
 
@@ -149,4 +149,4 @@ def stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval):
 
 
 # TODO line used to print to screen... prime used during dev. work and should be removed prior to release.
-print(handle(req))
+#print(handle(req))
