@@ -6,8 +6,9 @@ import json
 # TODO lines used to print to screen... prime used during dev. work and should be removed prior to release.
 #req = '{"tickersymbol": "oRcL"}'
 #req = '{"ticddddkersymbol": "oRcL"}'
-#req = '{"tickersymbol": "ORCL", "tickerperiod" : "1d"}'
-req = '{"tickersymbol": "oRcL", "tickerperiod" : "1d", "tickerinterval" : "15m"}'
+req = '{"tickersymbol": "ORCL", "tickerperiod" : "1d"}'
+#req = '{"tickersymbol": "oRcL", "tickerperiod" : "1d", "tickerinterval" : "15m"}'
+
 
 
 def errorResponse(errorMessage):
@@ -27,6 +28,7 @@ def errorResponse(errorMessage):
     return errorResponse
 
 
+
 def handle(req):
     '''
     the way OpenFaas will call the function and provides the request payload is always calling the "handle" function. In
@@ -35,6 +37,7 @@ def handle(req):
     a valid JSON request payload. In case where we have a proper formatted JSON request payload we will provide this to
     the logicMainHandler and leave all other actions to the logicMainHandler (including the generation of any other
     potential errorResponse return payloads.
+
     :param req:
     :return:
     '''
@@ -44,13 +47,7 @@ def handle(req):
         #print(socket.gethostname())
 
         responseMessage = logicMainHandler(req)
-        #responseMessage = json.dumps(responseMessage)
 
-
-
-
-
-        #return logicMainHandler(req)
         return responseMessage
 
     # catch value error exceptions
@@ -60,6 +57,7 @@ def handle(req):
     # Catch all exceptions
     except:
         return (errorResponse("Unexpected error"))
+
 
 
 def logicMainHandler(req):
@@ -112,26 +110,27 @@ def logicMainHandler(req):
     except:
         return (errorResponse("unexpected error while parsing request JSON in logicModule"))
 
-    # call the logic and return the outcome.
+    # In case we do not hit an exception that is blocking we can build the responseSuccessMessage and return this to the
+    # calling application. This inlcudes calling stockDataGrabber to collect data from the external data provider.
 
     responseSuccessMessage = {
         "status": "completed",
         "status_message": "success",
-        "response": "xx"
+        "response": (json.loads((stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval))))
     }
 
-    print(type(responseSuccessMessage))
-    print (responseSuccessMessage)
-    print(type(stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval)))
+    return (json.dumps(responseSuccessMessage))
 
-    print (json.dumps(responseSuccessMessage))
-    print (type(json.dumps(responseSuccessMessage)))
-
-
-    return stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval)
 
 
 def stockDataGrabber(tickerSymbol, tickerPeriod, tickerInterval):
+    '''
+
+    :param tickerSymbol:
+    :param tickerPeriod:
+    :param tickerInterval:
+    :return:
+    '''
     tickerSymbol = (tickerSymbol).upper()
     ticker = yf.Ticker(tickerSymbol)
     tickerData = ticker.history(period=tickerPeriod, interval=tickerInterval)
